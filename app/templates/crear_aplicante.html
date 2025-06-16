@@ -1,0 +1,82 @@
+<!-- app/templates/crear_aplicante.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Nuevo Aplicante</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-6">
+  <div class="max-w-2xl mx-auto bg-white p-8 rounded-xl shadow">
+    <h1 class="text-2xl font-bold mb-6">Formulario de Aplicante</h1>
+    <form id="form-aplicante" class="space-y-4">
+      <div>
+        <label class="block text-sm font-medium">Nombre completo</label>
+        <input type="text" name="nombre_completo" class="w-full border rounded p-2" maxlength="100" required>
+      </div>
+      <div>
+        <label class="block text-sm font-medium">Fecha de nacimiento</label>
+        <input type="date" name="fecha_nacimiento" class="w-full border rounded p-2" required>
+      </div>
+      <div>
+        <label class="block text-sm font-medium">No. Documento Único</label>
+        <input type="text" name="documento" class="w-full border rounded p-2" required>
+      </div>
+      <div>
+        <label class="block text-sm font-medium">País</label>
+        <input type="text" name="pais" class="w-full border rounded p-2" maxlength="20" required>
+      </div>
+      <div>
+        <label class="block text-sm font-medium">Universidad</label>
+        <input type="text" name="universidad" class="w-full border rounded p-2" maxlength="50" required>
+      </div>
+      <div>
+        <label class="block text-sm font-medium">Carrera</label>
+        <input type="text" name="carrera" class="w-full border rounded p-2" maxlength="50" required>
+      </div>
+      <div>
+        <label class="block text-sm font-medium">Último grado académico</label>
+        <input type="text" name="ultimo_grado_academico" class="w-full border rounded p-2" maxlength="30" required>
+      </div>
+      <div>
+        <label class="block text-sm font-medium">Email</label>
+        <input type="email" name="email" class="w-full border rounded p-2" maxlength="50" required>
+      </div>
+      <div>
+        <label class="block text-sm font-medium">Teléfono</label>
+        <input type="text" name="telefono" class="w-full border rounded p-2" maxlength="20" required>
+      </div>
+      <div>
+        <label class="block text-sm font-medium">Año de aplicación</label>
+        <input type="number" name="anio_aplicacion" class="w-full border rounded p-2" maxlength="4" required>
+      </div>
+      <div>
+        <label class="block text-sm font-medium">Observaciones</label>
+        <textarea name="observaciones" class="w-full border rounded p-2"></textarea>
+      </div>
+      <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Enviar</button>
+    </form>
+    <div id="mensaje" class="mt-4 text-sm font-medium"></div>
+  </div>
+
+  <script>
+    document.getElementById('form-aplicante').addEventListener('submit', async function (e) {
+      e.preventDefault();
+
+      const form = e.target;
+      const datos = Object.fromEntries(new FormData(form).entries());
+
+      const response = await fetch('/aplicantes/crear', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(datos)
+      });
+
+      const res = await response.json();
+      const mensaje = document.getElementById('mensaje');
+      mensaje.textContent = res.mensaje || res.error;
+      mensaje.className = res.error ? 'text-red-500' : 'text-green-600';
+    });
+  </script>
+</body>
+</html>
