@@ -1,8 +1,0 @@
-Flask
-Flask-SQLAlchemy
-pyodbc
-Flask-Login  # Muy recomendado para manejar sesiones de usuario
-Flask-WTF    # Para manejar formularios de forma segura y sencilla
-python-dotenv # Para cargar variables de entorno desde un archivo .env
-SQLAlchemy==1.4.46  # Versión estable compatible con pyodbc
-cryptography        # Para encriptación de contraseñas
