@@ -2,32 +2,38 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Panel Administrador</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 min-h-screen flex flex-col items-center justify-center">
   <div class="bg-white p-10 rounded-lg shadow-lg max-w-4xl w-full text-center">
     <h1 class="text-2xl font-bold mb-6 text-blue-800">Panel del Administrador</h1>
-    <p class="text-gray-600 mb-8">Bienvenido al panel de control. Desde aquí puedes gestionar usuarios, ver aplicaciones y generar reportes.</p>
+    <p class="text-gray-600 mb-8">
+      Bienvenido al panel de control. Desde aquí puedes gestionar usuarios, ver aplicaciones y generar reportes.
+    </p>
 
     <!-- Cuadros con enlaces -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-      <a href="{{ url_for('panel.admin_usuarios') }}" class="bg-blue-100 hover:bg-blue-200 text-blue-800 p-6 rounded-lg shadow cursor-pointer transition">
+      <a href="{{ url_for('panel.admin_usuarios') }}" 
+         class="bg-blue-100 hover:bg-blue-200 text-blue-800 p-6 rounded-lg shadow cursor-pointer transition">
         <h2 class="text-xl font-semibold mb-2">Administrar Usuarios</h2>
         <p class="text-sm">Gestiona los usuarios del sistema.</p>
       </a>
 
-              <a href="{{ url_for('panel.admin_aplicantes') }}" class="bg-green-100 hover:bg-green-200 text-green-800 p-6 rounded-lg shadow cursor-pointer transition">
-          <h2 class="text-xl font-semibold mb-2">Ver Aplicantes</h2>
-          <p class="text-sm">Consulta los aplicantes registrados.</p>
-        </a>
-
-
-      <a href="" class="bg-yellow-100 hover:bg-yellow-200 text-yellow-800 p-6 rounded-lg shadow cursor-pointer transition">
-        <h2 class="text-xl font-semibold mb-2">Ver Historial</h2>
-        <p class="text-sm">Revisa el historial de acciones.</p>
+      <a href="{{ url_for('panel.admin_aplicantes') }}" 
+         class="bg-green-100 hover:bg-green-200 text-green-800 p-6 rounded-lg shadow cursor-pointer transition">
+        <h2 class="text-xl font-semibold mb-2">Ver Aplicantes</h2>
+        <p class="text-sm">Consulta los aplicantes registrados.</p>
       </a>
+
+              <a href="{{ url_for('panel.admin_ver_todos_historial') }}" 
+   class="bg-yellow-100 hover:bg-yellow-200 text-yellow-800 p-6 rounded-lg shadow cursor-pointer transition">
+  <h2 class="text-xl font-semibold mb-2">Ver Todo el Historial</h2>
+  <p class="text-sm">Revisa todo el historial registrado.</p>
+</a>
+
+
     </div>
 
     <a href="/logout" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">Cerrar sesión</a>

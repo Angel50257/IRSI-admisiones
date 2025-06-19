@@ -8,6 +8,7 @@ from app import db
 from sqlalchemy import text
 import datetime
 from datetime import datetime
+from sqlalchemy.orm import joinedload
 
 
 
@@ -136,7 +137,7 @@ def admin_eliminar_usuario(id):
     return redirect(url_for('panel.admin_usuarios'))
 
 
-# Ver Aplicante
+# Ver Historial
 @bp.route('/admin/aplicantes')
 @login_required
 def admin_aplicantes():
@@ -145,6 +146,44 @@ def admin_aplicantes():
 
     aplicantes = Aplicante.query.order_by(Aplicante.fecha_registro.desc()).all()
     return render_template('admin_aplicantes.html', aplicantes=aplicantes)
+
+# Editar historial
+@bp.route('/admin/historial/editar/<int:id>', methods=['GET', 'POST'])
+@login_required
+def admin_editar_historial(id):
+    if current_user.rol != 'ADMINISTRADOR':
+        return "No autorizado", 403
+
+    historial = Historial.query.get_or_404(id)
+
+    if request.method == 'POST':
+        # solo se pueden editar estos campos (aplicante_id e id son readonly)
+        fecha_evento = request.form.get('fecha_evento')
+        motivo = request.form.get('motivo')
+        duracion_meses = request.form.get('duracion_meses') or None
+        observaciones = request.form.get('observaciones') or None
+
+        try:
+            historial.fecha_evento = datetime.strptime(fecha_evento, '%Y-%m-%dT%H:%M')
+            historial.motivo = motivo
+            historial.duracion_meses = int(duracion_meses) if duracion_meses else None
+            historial.observaciones = observaciones
+
+            db.session.commit()
+            flash('Historial actualizado correctamente.', 'success')
+            return redirect(url_for('panel.admin_ver_todos_historial'))
+
+        except Exception as e:
+            db.session.rollback()
+            flash(f'Error al actualizar historial: {e}', 'danger')
+
+    # GET: mostrar formulario con datos actuales, formato para input datetime-local
+    fecha_evento_str = historial.fecha_evento.strftime('%Y-%m-%dT%H:%M')
+
+    return render_template('admin_editar_historial.html', historial=historial, fecha_evento_str=fecha_evento_str)
+
+
+
 
 
 #Agregar historial por aplicante
@@ -212,6 +251,20 @@ def admin_historial():
         return "No autorizado", 403
     return render_template('admin_historial.html')
 
+############################################################
+# ver historial
+
+@bp.route('/admin/historial/todos')
+@login_required
+def admin_ver_todos_historial():
+    if current_user.rol != 'ADMINISTRADOR':
+        return "No autorizado", 403
+
+    historial = Historial.query.options(joinedload(Historial.aplicante)).order_by(Historial.fecha_evento.desc()).all()
+    return render_template('admin_ver_todos_historial.html', historial=historial)
+
+
+
 # Dashboards otros roles
 @bp.route('/asistente/dashboard')
 @login_required
@@ -233,3 +286,31 @@ def consulta_dashboard():
     if current_user.rol != 'CONSULTA':
         return "No autorizado", 403
     return render_template('panel_consulta.html')
+
+
+#eliminar APLICANTES
+
+@bp.route('/admin/aplicantes/eliminar/<int:id>', methods=['POST'])
+@login_required
+def admin_eliminar_aplicante(id):
+    if current_user.rol != 'ADMINISTRADOR':
+        flash('No autorizado', 'danger')
+        return redirect(url_for('panel.admin_aplicantes'))
+
+    aplicante = Aplicante.query.get_or_404(id)
+
+    # Verificar si tiene historial
+    tiene_historial = db.session.query(Historial).filter_by(aplicante_id=id).first()
+    if tiene_historial:
+        flash('No se puede eliminar el aplicante porque tiene historial registrado.', 'danger')
+        return redirect(url_for('panel.admin_aplicantes'))
+
+    try:
+        db.session.delete(aplicante)
+        db.session.commit()
+        flash('Aplicante eliminado correctamente.', 'success')
+    except Exception as e:
+        db.session.rollback()
+        flash(f'Error al eliminar aplicante: {e}', 'danger')
+
+    return redirect(url_for('panel.admin_aplicantes'))
