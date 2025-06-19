@@ -288,32 +288,40 @@ def consulta_dashboard():
     return render_template('panel_consulta.html')
 
 
-#eliminar APLICANTES
-
-@bp.route('/admin/aplicantes/eliminar/<int:id>', methods=['POST'])
+#Agregar aplicante a historial por eventos
+@bp.route('/admin/aplicantes/agregar_historial/<int:id>', methods=['POST'])
 @login_required
-def admin_eliminar_aplicante(id):
+def admin_agregar_historial_evento(id):
     if current_user.rol != 'ADMINISTRADOR':
         flash('No autorizado', 'danger')
         return redirect(url_for('panel.admin_aplicantes'))
 
-    aplicante = Aplicante.query.get_or_404(id)
+    # Verificar si ya existe un evento para ese aplicante
+    existe_evento = db.session.execute(
+        "SELECT 1 FROM historial_eventos WHERE aplicante_id = :id AND evento = 'Aplicante agregado a historial'",
+        {'id': id}
+    ).first()
 
-    # Verificar si tiene historial
-    tiene_historial = db.session.query(Historial).filter_by(aplicante_id=id).first()
-    if tiene_historial:
-        flash('No se puede eliminar el aplicante porque tiene historial registrado.', 'danger')
+    if existe_evento:
+        flash('El aplicante ya tiene un historial por evento registrado.', 'warning')
         return redirect(url_for('panel.admin_aplicantes'))
 
     try:
-        db.session.delete(aplicante)
+        # Actualizamos la tabla aplicantes para disparar el trigger (aunque no cambiemos valores)
+        db.session.execute(
+            "UPDATE aplicantes SET estado = estado WHERE id = :id", {'id': id}
+        )
         db.session.commit()
-        flash('Aplicante eliminado correctamente.', 'success')
+        flash('Historial por evento agregado correctamente.', 'success')
     except Exception as e:
         db.session.rollback()
-        flash(f'Error al eliminar aplicante: {e}', 'danger')
+        flash(f'Error al agregar historial por evento: {e}', 'danger')
 
     return redirect(url_for('panel.admin_aplicantes'))
+
+
+
+
 
 
 #Historial por eventos
