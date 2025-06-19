@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <script src="https://kit.fontawesome.com/64d58efce2.js" crossorigin="anonymous"></script>
+
+  <!-- CSS local -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}" />
+
+  <!-- Librerías externas -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.5.0/css/flag-icon.min.css" rel="stylesheet" />
+
+  <!-- CSS del login omitido para solo incluir el navbar -->
+  <style>
+    /* CSS básico para el navbar estilo Bootstrap */
+    .navbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.5rem 1rem;
+      background-color: #212529; /* bg-dark */
+      color: white;
+    }
+
+    .navbar-brand {
+      color: white;
+      text-decoration: none;
+      font-size: 1.25rem;
+      font-weight: 500;
+    }
+
+    .navbar-toggler {
+      display: none;
+      background-color: transparent;
+      border: none;
+      color: white;
+      font-size: 1.25rem;
+      cursor: pointer;
+    }
+
+    .navbar-nav {
+      list-style: none;
+      display: flex;
+      padding-left: 0;
+      margin-bottom: 0;
+    }
+
+    .nav-item {
+      margin-left: 1rem;
+    }
+
+    .nav-link {
+      color: white;
+      text-decoration: none;
+      padding: 0.5rem 0.75rem;
+      display: block;
+      transition: color 0.3s ease;
+    }
+
+    .nav-link:hover, .nav-link.active {
+      color: #0d6efd; /* Bootstrap primary blue */
+      text-decoration: none;
+    }
+
+    @media (max-width: 768px) {
+      .navbar-nav {
+        flex-direction: column;
+        display: none;
+        width: 100%;
+        background-color: #212529;
+      }
+
+      .navbar-nav.show {
+        display: flex;
+      }
+
+      .nav-item {
+        margin-left: 0;
+      }
+
+      .navbar-toggler {
+        display: block;
+      }
+    }
+  </style>
+
+  <title>Formulario de inicio de sesión y registro</title>
+</head>
+<body>
+    <!-- Navbar -->
+  <nav class="navbar">
+    <a class="navbar-brand" href="{{ url_for('index') }}">IRSI</a>
+    <button class="navbar-toggler" type="button" aria-label="Toggle navigation" id="navbar-toggler">
+      &#9776;
+    </button>
+    <ul class="navbar-nav" id="navbarNav">
+      <li class="nav-item">
+        <a class="nav-link active" aria-current="page" href="{{ url_for('index') }}">Inicio</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('auth.login') }}">Login</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('aplicantes.crear_aplicante') }}">Registrarse</a>
+      </li>
+    </ul>
+  </nav>
+  
+  <div class="container">
+    <div class="forms-container">
+      <div class="signin-signup">
+                <form action="{{ url_for('auth.login') }}" method="POST" class="sign-in-form">
+          <h2 class="title">Iniciar sesión</h2>
+
+          <div class="input-field">
+            <i class="fas fa-user"></i>
+            <input type="text" name="username" placeholder="Usuario" required />
+          </div>
+
+          <div class="input-field">
+            <i class="fas fa-lock"></i>
+            <input type="password" name="password" placeholder="Contraseña" required />
+          </div>
+          <input type="submit" class="btn" value="Iniciar sesión" />
+        </form>
+
+
+        <!-- Formulario de aplicante -->
+        <form action="{{ url_for('aplicantes.crear_aplicante') }}" class="sign-up-form">
+          <h2 class="title">Aplicación Beca</h2>
+          <p>Para aplicar, se debe llenar el formulario siguiente:</p>
+          <input type="submit" class="btn" value="Inicia tu proceso aquí"
+                 style="font-size: 1rem; padding: 12px 24px; width: auto; max-width: 100%;">
+        </form>
+      </div>
+    </div>
+
+    <div class="panels-container">
+      <div class="panel left-panel">
+        <div class="content">
+          <h3>Admisiones</h3>
+          <p>
+            Actualmente esta capacitación se otorga por medio de becas a estudiantes de Latinoamérica que tengan un perfil específico.
+            Si quieres ser parte de la próxima promoción, por favor completa el formulario de aplicación.
+          </p>
+          <button class="btn transparent" id="sign-up-btn">
+            Iniciar aplicación
+          </button>
+        </div>
+        <img src="{{ url_for('static', filename='imagenes/LOGO-IRSI-BLANCO-e1707496362435.png') }}" class="image" alt="IRSI Logo" />
+      </div>
+
+      <div class="panel right-panel">
+        <div class="content">
+          <h3>¿Eres parte del equipo administrativo?</h3>
+          <p>
+            Este espacio está reservado para administradores, asistentes y directores.
+          </p>
+          <button class="btn transparent" id="sign-in-btn">
+            Iniciar sesión
+          </button>
+        </div>
+        <img src="{{ url_for('static', filename='imagenes/LOGO-IRSI-BLANCO-e1707496362435.png') }}" class="image" alt="IRSI Logo" />
+      </div>
+    </div>
+  </div>
+
+  <!-- JS local -->
+  <script src="{{ url_for('static', filename='js/login.js') }}"></script>
+</body>
+</html>
