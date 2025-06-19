@@ -314,3 +314,22 @@ def admin_eliminar_aplicante(id):
         flash(f'Error al eliminar aplicante: {e}', 'danger')
 
     return redirect(url_for('panel.admin_aplicantes'))
+
+
+#Historial por eventos
+
+@bp.route('/admin/historial_eventos')
+@login_required
+def admin_ver_historial_eventos():
+    if current_user.rol != 'ADMINISTRADOR':
+        return "No autorizado", 403
+
+    # Traemos todos los eventos, ordenados por fecha descendente
+    eventos = db.session.execute(
+        "SELECT he.id, he.evento, he.aplicante_id, he.fecha, a.nombre_completo "
+        "FROM historial_eventos he "
+        "LEFT JOIN aplicantes a ON he.aplicante_id = a.id "
+        "ORDER BY he.fecha DESC"
+    ).fetchall()
+
+    return render_template('admin_ver_historial_eventos.html', eventos=eventos)
