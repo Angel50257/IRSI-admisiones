@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Agregar al Historial</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex flex-col items-center justify-center py-10">
+  <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-2xl">
+    <h1 class="text-2xl font-bold text-yellow-700 mb-4">Agregar Evento al Historial</h1>
+
+    <form method="POST">
+      <!-- Aplicante ID -->
+      <div class="mb-4">
+        <label class="block text-sm font-medium text-gray-700">ID del Aplicante</label>
+        <input type="text" name="aplicante_id" value="{{ aplicante_id }}" readonly
+               class="mt-1 block w-full border border-gray-300 rounded-md p-2 bg-gray-100 cursor-not-allowed">
+      </div>
+
+      <!-- Fecha del evento -->
+      <div class="mb-4">
+        <label class="block text-sm font-medium text-gray-700">Fecha del Evento</label>
+        <input type="datetime-local" name="fecha_evento" required
+               class="mt-1 block w-full border border-gray-300 rounded-md p-2">
+      </div>
+
+      <!-- Motivo -->
+      <div class="mb-4">
+        <label class="block text-sm font-medium text-gray-700">Motivo</label>
+        <input type="text" name="motivo" required
+               class="mt-1 block w-full border border-gray-300 rounded-md p-2">
+      </div>
+
+      <!-- Duración (opcional) -->
+      <div class="mb-4">
+        <label class="block text-sm font-medium text-gray-700">Duración (meses)</label>
+        <input type="number" name="duracion_meses"
+               class="mt-1 block w-full border border-gray-300 rounded-md p-2">
+      </div>
+
+      <!-- Observaciones -->
+      <div class="mb-4">
+        <label class="block text-sm font-medium text-gray-700">Observaciones</label>
+        <textarea name="observaciones" rows="3"
+                  class="mt-1 block w-full border border-gray-300 rounded-md p-2"></textarea>
+      </div>
+
+      <!-- Botones -->
+      <div class="flex justify-between">
+        <a href="{{ url_for('panel.admin_aplicantes') }}" class="text-sm text-gray-600 hover:underline">Cancelar</a>
+        <button type="submit" class="bg-yellow-600 text-white px-4 py-2 rounded hover:bg-yellow-700">Guardar</button>
+      </div>
+    </form>
+  </div>
+</body>
+</html>

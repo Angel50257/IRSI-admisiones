@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Agregar Usuario</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex flex-col items-center justify-start py-10">
+  <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-lg">
+    <h1 class="text-2xl font-bold text-blue-800 mb-6">Agregar Usuario</h1>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="mb-4">
+          {% for category, msg in messages %}
+            <div class="p-2 mb-2 rounded {{ 'bg-red-200 text-red-800' if category == 'danger' else 'bg-green-200 text-green-800' }}">
+              {{ msg }}
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <form action="{{ url_for('panel.admin_agregar_usuario') }}" method="POST" class="space-y-6">
+      <div>
+        <label for="nombre_usuario" class="block font-medium mb-1">Nombre de Usuario</label>
+        <input type="text" id="nombre_usuario" name="nombre_usuario" required
+               class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+      </div>
+
+      <div>
+        <label for="contrasena" class="block font-medium mb-1">Contraseña</label>
+        <input type="password" id="contrasena" name="contrasena" required
+               class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+      </div>
+
+      <div>
+        <label for="rol" class="block font-medium mb-1">Rol</label>
+        <select id="rol" name="rol" required
+                class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+          <option value="" disabled selected>Seleccione un rol</option>
+          <option value="ASISTENTE">ASISTENTE</option>
+          <option value="DIRECTOR">DIRECTOR</option>
+          <option value="CONSULTA">CONSULTA</option>
+        </select>
+      </div>
+
+      <div class="flex justify-between items-center">
+        <a href="{{ url_for('panel.admin_usuarios') }}" class="text-blue-600 hover:underline">&larr; Volver</a>
+        <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">Agregar Usuario</button>
+      </div>
+    </form>
+  </div>
+</body>
+</html>

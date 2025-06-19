@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Aplicantes Registrados</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex flex-col items-center justify-start py-10">
+  <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-7xl">
+    <h1 class="text-2xl font-bold text-green-800 mb-4">Aplicantes Registrados</h1>
+    <p class="text-gray-600 mb-6">Listado completo de personas que han aplicado.</p>
+
+    <!-- Enlace de regreso -->
+    <div class="mb-4">
+      <a href="{{ url_for('panel.administrador_dashboard') }}" class="text-sm text-green-700 hover:underline">&larr; Volver al panel</a>
+    </div>
+
+    <div class="overflow-x-auto">
+      <table class="min-w-full divide-y divide-gray-200 text-sm">
+        <thead class="bg-green-100 text-green-800">
+          <tr>
+            <th class="px-4 py-2 text-left">ID</th>
+            <th class="px-4 py-2 text-left">Nombre</th>
+            <th class="px-4 py-2 text-left">Documento</th>
+            <th class="px-4 py-2 text-left">País</th>
+            <th class="px-4 py-2 text-left">Carrera</th>
+            <th class="px-4 py-2 text-left">Universidad</th>
+            <th class="px-4 py-2 text-left">Estado</th>
+            <th class="px-4 py-2 text-left">Año Aplicación</th>
+            <th class="px-4 py-2 text-left">Acciones</th>
+
+          </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-200">
+          {% for aplicante in aplicantes %}
+          <tr>
+            <td class="px-4 py-2">{{ aplicante.id }}</td>
+            <td class="px-4 py-2">{{ aplicante.nombre_completo }}</td>
+            <td class="px-4 py-2">{{ aplicante.documento }}</td>
+            <td class="px-4 py-2">{{ aplicante.pais }}</td>
+            <td class="px-4 py-2">{{ aplicante.carrera or '-' }}</td>
+            <td class="px-4 py-2">{{ aplicante.universidad or '-' }}</td>
+            <td class="px-4 py-2">{{ aplicante.estado }}</td>
+            <td class="px-4 py-2">{{ aplicante.anio_aplicacion }}</td>
+            <td class="px-4 py-2">
+  <a href="{{ url_for('panel.registrar_historial', aplicante_id=aplicante.id) }}"
+     class="text-sm text-blue-600 hover:underline">Agregar a historial</a>
+</td>
+
+          </tr>
+          {% else %}
+          <tr>
+            <td colspan="8" class="text-center text-gray-500 py-4">No hay aplicantes registrados.</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</body>
+</html>

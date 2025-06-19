@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Editar Usuario</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex flex-col items-center justify-start py-10">
+  <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-lg">
+    <h1 class="text-2xl font-bold text-blue-800 mb-6">Editar Usuario</h1>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="mb-4">
+          {% for category, msg in messages %}
+            <div class="p-2 mb-2 rounded {{ 'bg-red-200 text-red-800' if category == 'danger' else 'bg-green-200 text-green-800' }}">
+              {{ msg }}
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <form action="{{ url_for('panel.admin_editar_usuario', id=usuario.id) }}" method="POST" class="space-y-6">
+      <div>
+        <label for="id" class="block font-medium mb-1">ID</label>
+        <input type="text" id="id" name="id" value="{{ usuario.id }}" readonly
+               class="w-full border border-gray-300 rounded px-3 py-2 bg-gray-100 cursor-not-allowed" />
+      </div>
+
+      <div>
+        <label for="nombre_usuario" class="block font-medium mb-1">Nombre de Usuario</label>
+        <input type="text" id="nombre_usuario" name="nombre_usuario" value="{{ usuario.nombre_usuario }}" required
+               class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+      </div>
+
+      <div>
+        <label for="rol" class="block font-medium mb-1">Rol</label>
+        <select id="rol" name="rol" required
+                class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+          <option value="ASISTENTE" {% if usuario.rol == 'ASISTENTE' %}selected{% endif %}>ASISTENTE</option>
+          <option value="DIRECTOR" {% if usuario.rol == 'DIRECTOR' %}selected{% endif %}>DIRECTOR</option>
+          <option value="CONSULTA" {% if usuario.rol == 'CONSULTA' %}selected{% endif %}>CONSULTA</option>
+        </select>
+      </div>
+
+      <div class="flex justify-between items-center">
+        <a href="{{ url_for('panel.admin_usuarios') }}" class="text-blue-600 hover:underline">&larr; Volver</a>
+        <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">Guardar Cambios</button>
+      </div>
+    </form>
+  </div>
+</body>
+</html>
