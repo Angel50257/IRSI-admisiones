@@ -10,3 +10,6 @@ class Usuario(UserMixin, db.Model):
     nombre_usuario = db.Column(db.String(50), unique=True, nullable=False)
     contrasena_hash = db.Column(db.String(255), nullable=False)
     rol = db.Column(db.String(20), nullable=False)
+
+
+

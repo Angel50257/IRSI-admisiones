@@ -1,11 +1,14 @@
-# app/models/usuario.py
 from app import db
-from flask_login import UserMixin
 
-class Usuario(UserMixin, db.Model):
-    __tablename__ = 'usuarios'
+class Historial(db.Model):
+    __tablename__ = 'historial'
 
     id = db.Column(db.Integer, primary_key=True)
-    nombre_usuario = db.Column(db.String(50), unique=True, nullable=False)
-    contrasena_hash = db.Column(db.String(255), nullable=False)
-    rol = db.Column(db.String(20), nullable=False)
+    aplicante_id = db.Column(db.Integer, db.ForeignKey('aplicantes.id'), nullable=False)
+    fecha_evento = db.Column(db.DateTime, nullable=False)
+    motivo = db.Column(db.String(255), nullable=False)
+    duracion_meses = db.Column(db.Integer)
+    observaciones = db.Column(db.Text)
+
+    # Relación opcional con el modelo Aplicante
+    aplicante = db.relationship('Aplicante', backref='historiales')

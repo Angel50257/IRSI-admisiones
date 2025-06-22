@@ -1,0 +1,45 @@
+<!-- panel_asistente.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Panel Asistente</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex flex-col items-center justify-center py-10">
+  <div class="bg-white p-8 rounded-lg shadow-lg max-w-4xl w-full">
+    <h1 class="text-2xl font-bold text-blue-800 mb-6 text-center">Panel del Asistente</h1>
+    <p class="text-gray-600 text-center mb-8">Gestión y apoyo administrativo para los procesos de admisión.</p>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <a href="{{ url_for('panel.admin_aplicantes') }}"
+         class="bg-green-100 hover:bg-green-200 text-green-800 p-6 rounded-lg shadow cursor-pointer transition">
+        <h2 class="text-xl font-semibold mb-2">Ver Aplicantes</h2>
+        <p class="text-sm">Consulta y gestiona los aplicantes registrados.</p>
+      </a>
+
+      <a href="{{ url_for('panel.admin_ver_todos_historial') }}"
+         class="bg-yellow-100 hover:bg-yellow-200 text-yellow-800 p-6 rounded-lg shadow cursor-pointer transition">
+        <h2 class="text-xl font-semibold mb-2">Ver Historial</h2>
+        <p class="text-sm">Consulta los eventos registrados en el historial.</p>
+      </a>
+
+      <a href="{{ url_for('panel.admin_ver_historial_eventos') }}"
+         class="bg-blue-100 hover:bg-blue-200 text-blue-800 p-6 rounded-lg shadow cursor-pointer transition">
+        <h2 class="text-xl font-semibold mb-2">Historial por Evento</h2>
+        <p class="text-sm">Revisa el historial generado por eventos del sistema.</p>
+      </a>
+
+      <a href="{{ url_for('panel.admin_usuarios') }}"
+         class="bg-purple-100 hover:bg-purple-200 text-purple-800 p-6 rounded-lg shadow cursor-pointer transition">
+        <h2 class="text-xl font-semibold mb-2">Gestión de Usuarios</h2>
+        <p class="text-sm">Agrega, edita o elimina usuarios del sistema.</p>
+      </a>
+    </div>
+
+    <div class="text-center mt-8">
+      <a href="/logout" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">Cerrar sesión</a>
+    </div>
+  </div>
+</body>
+</html>

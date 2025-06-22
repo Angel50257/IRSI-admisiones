@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Aplicantes Registrados</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex flex-col items-center justify-start py-10">
+  <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-7xl">
+    <h1 class="text-2xl font-bold text-green-800 mb-4">Aplicantes Registrados</h1>
+    <p class="text-gray-600 mb-6">Listado completo de personas que han aplicado.</p>
+
+    <!-- Enlace de regreso -->
+    <div class="mb-4">
+      <a href="{{ url_for('panel.administrador_dashboard') }}" class="text-sm text-green-700 hover:underline">
+        &larr; Volver al panel
+      </a>
+    </div>
+
+    <!-- Mensajes Flash -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="mb-6">
+          {% for category, message in messages %}
+            <div class="p-4 rounded text-sm mb-2
+              {% if category == 'success' %}bg-green-100 text-green-800
+              {% elif category == 'warning' %}bg-yellow-100 text-yellow-800
+              {% elif category == 'danger' %}bg-red-100 text-red-800
+              {% else %}bg-gray-100 text-gray-800{% endif %}">
+              {{ message }}
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <!-- Buscador -->
+    <div class="max-w-md mx-auto mb-6">
+      <input type="text" id="buscador" placeholder="Buscar por nombre, país, estado o carrera..."
+        class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-green-500 focus:border-green-500" />
+    </div>
+
+    <!-- Botón de exportación -->
+    <div class="flex justify-end mb-4">
+      <a href="{{ url_for('aplicantes.exportar_excel') }}" 
+        class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+        Exportar a Excel
+      </a>
+    </div>
+
+    <!-- Tabla de aplicantes -->
+    <div class="overflow-x-auto">
+      <table class="min-w-full divide-y divide-gray-200 text-sm">
+        <thead class="bg-green-100 text-green-800">
+          <tr>
+            <th class="px-4 py-2 text-left">ID</th>
+            <th class="px-4 py-2 text-left">Nombre</th>
+            <th class="px-4 py-2 text-left">Documento</th>
+            <th class="px-4 py-2 text-left">País</th>
+            <th class="px-4 py-2 text-left">Carrera</th>
+            <th class="px-4 py-2 text-left">Universidad</th>
+            <th class="px-4 py-2 text-left">Estado</th>
+            <th class="px-4 py-2 text-left">Año Aplicación</th>
+            <th class="px-4 py-2 text-left">Acciones</th>
+          </tr>
+        </thead>
+        <tbody id="tabla-aplicantes" class="bg-white divide-y divide-gray-200">
+          {% for aplicante in aplicantes %}
+          <tr>
+            <td class="px-4 py-2">{{ aplicante.id }}</td>
+            <td class="px-4 py-2">{{ aplicante.nombre_completo }}</td>
+            <td class="px-4 py-2">{{ aplicante.documento }}</td>
+            <td class="px-4 py-2">{{ aplicante.pais }}</td>
+            <td class="px-4 py-2">{{ aplicante.carrera or '-' }}</td>
+            <td class="px-4 py-2">{{ aplicante.universidad or '-' }}</td>
+            <td class="px-4 py-2">{{ aplicante.estado }}</td>
+            <td class="px-4 py-2">{{ aplicante.anio_aplicacion }}</td>
+            <td class="px-4 py-2 space-y-1">
+              <a href="{{ url_for('panel.registrar_historial', aplicante_id=aplicante.id) }}"
+                 class="block text-sm text-blue-600 hover:underline">Agregar a historial</a>
+              <form method="POST" action="{{ url_for('panel.admin_agregar_historial_evento', id=aplicante.id) }}">
+                <button type="submit" class="text-sm text-blue-600 hover:underline bg-transparent border-0 p-0">
+                  Agregar a historial por evento
+                </button>
+              </form>
+            </td>
+          </tr>
+          {% else %}
+          <tr>
+            <td colspan="9" class="text-center text-gray-500 py-4">No hay aplicantes registrados.</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Script para búsqueda dinámica -->
+  <script>
+    const buscador = document.getElementById('buscador');
+    const tablaBody = document.getElementById('tabla-aplicantes');
+
+    function cargarAplicantes(q = "") {
+      fetch(`/filtrar_aplicantes?q=${encodeURIComponent(q)}`)
+        .then(res => res.text())
+        .then(html => {
+          tablaBody.innerHTML = html;
+        });
+    }
+
+    buscador.addEventListener('input', function () {
+      cargarAplicantes(this.value);
+    });
+
+    // Cargar todos los aplicantes al inicio
+    window.addEventListener('DOMContentLoaded', () => cargarAplicantes());
+  </script>
+
+</body>
+</html>
